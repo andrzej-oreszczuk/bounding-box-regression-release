@@ -1,0 +1,8 @@
+batch 8
+model_path  ## ścieżka do modelu do załadowania, zostawić puste przy inicjalizacji bez ładowania modelu
+model_save_path ./models/test                         ## gdzie zapisać model
+data_dir ./datasets/chloroplast                            ## ścieżka do zbioru z danymi treningowymi, walidacyjnymi i testowymi
+labels_xmax 242    ## maksymalna szerokość ramki w zbiorze danych
+labels_ymax 394    ## maksymalna wysokość ramki w zbiorze danych
+resume_training 0 ## 1 w przypadku kontunuacji treningu
+epochs 37

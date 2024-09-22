@@ -1,0 +1,5 @@
+model_path ./models/pretrained_chloroplast_last/lightning_logs/version_0/checkpoints/point-epoch=35-valid_loss=0.001630-train_loss=0.001332.ckpt  ## ścieżka do modelu do załadowania
+labels_xmax 242    ## maksymalna szerokość ramki w zbiorze danych
+labels_ymax 394    ## maksymalna wysokość ramki w zbiorze danych
+data_dir ./datasets/chloroplast/test                             ## ścieżka do danych do analizy
+save_labels_directory ./datasets/chloroplast/test/created_labels  ## ścieżka do zapisania wyników
