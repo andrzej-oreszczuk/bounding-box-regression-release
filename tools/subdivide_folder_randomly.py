@@ -18,7 +18,7 @@ def directories(path):
     return "/".join(components[0:len(components)-1])
 
 def main():
-    subfolders_cnt = 5
+    subfolders_cnt = 2
 
     usage(subfolders_cnt)
 

@@ -15,11 +15,14 @@ def save_img_with_bbox(path_name_img, path_name_label, path_name_label_converted
     for dt in bbox:
         points_x = []
         points_y = []
-
-        line_split = dt.split(' ')
+        
+        dt = dt.rstrip()
+        line_split = dt.split()
+        #print(dt + "end")
         if len(line_split) > 5:
             for d in range(len(line_split)):
                 if d > 0:
+                    #print(line_split[d] + "val")
                     if d % 2 == 1:
                         points_x.append(float(line_split[d]))
                     else:

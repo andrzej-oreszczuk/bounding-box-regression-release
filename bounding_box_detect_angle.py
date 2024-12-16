@@ -1,6 +1,7 @@
 from torch import nn, utils, optim, Tensor, cuda, squeeze
 import os
 import sys
+import matplotlib.pyplot as plt
 import copy
 from PIL import Image
 
@@ -11,6 +12,7 @@ from torch.utils.data import Dataset, DataLoader
 import numpy as np
 
 from dataset_class_rotating import rotated_object
+
 
 from init_model import bbr_model
 from lightning_module import bbr
@@ -35,38 +37,44 @@ def main():
     config_data = fl.readlines()
     fl.close()
 
+
+
     batch = 1
     model_path = ""
     data_dir = ""
-    xmax = 160
-    ymax = 160
+    model_type = "simple"
+    model_mode = 21
 
     for line in config_data:
         option = line.split()
         match option[0]:
+            case "batch":
+                batch = int(option[1])
             case "model_path":
                 model_path = option[1]
             case "data_dir":
                 data_dir = option[1]
-            case "save_labels_directory":
-                save_dir = option[1]
-            case "labels_xmax":
-                xmax = int(option[1])
-            case "labels_ymax":
-                ymax = int(option[1])
+            case "model_type":
+                model_type = option[1]
+            case "model_mode":
+                model_mode = int(option[1])
             case _:
                 print("Unknown config parameter")
 
-    locations = os.listdir(data_dir + "/locations_of_objects")
-
-    dmax = (xmax**2 + ymax**2)**(1/2)
-
-
     # load model
-    light_model = bbr.load_from_checkpoint(model_path, bbr_model=bbr_model(computational_device))
+    match model_type:
+        case "simple":
+            if model_path != "##":
+                light_model = bbr.load_from_checkpoint(model_path,
+                                                       bbr_model=bbr_model(computational_device, mode=model_mode))
+            else:
+                light_model = bbr(bbr_model(computational_device, mode=model_mode))
+        case _:
+            print("Unknown model type")
+
+    locations = os.listdir(data_dir + "/approximate_labels")
 
     model = light_model.model
-
 
     # detect best angle
     model.eval()
@@ -74,16 +82,48 @@ def main():
     for l in locations:
 
         best_angle = 0
-        min_area = 1.0
-
+        min_average_area = 1.0
+        areas = []
+        print(l)
         for a in range(360):
-            created_label = model(rotated_object(data_dir, data_dir + "/locations_of_objects/"+l, dmax, dmax, a)["image"], rotated_object(data_dir, data_dir + "/locations_of_objects/"+l, dmax, dmax, a)["location"])
-            created_label = created_label.squeeze()
-            area = created_label[2]*created_label[3]
-            if area < min_area:
-                min_area = area
+            rotated = rotated_object(data_dir, data_dir + "/approximate_labels/"+l, a)
+            #print( rotated["location"], rotated["image_size"])
+            created_prediction = model(rotated["image"].to(computational_device))
+            prediction = Tensor.numpy(squeeze(created_prediction), force=True)
+
+
+            w = prediction[2] + prediction[3]
+            h = prediction[0] + prediction[1]
+
+            area = w*h
+            areas.append(area)
+        for a in range(360):
+            averaged_area = 0
+            for i in range(21):
+                if a-10+i < 360:
+                    averaged_area += areas[a-10+i]
+                else:
+                    averaged_area += areas[a - 10 + i-360]
+            averaged_area /= 21
+            if averaged_area < min_average_area:
                 best_angle = a
-        rotated_object(data_dir, data_dir + "/locations_of_objects/" + l, dmax, dmax, best_angle, 1)
+                min_average_area = averaged_area
+        print(best_angle)
+
+
+        #plt.plot(areas)
+        #plt.ylabel(best_angle)
+        #plt.show()
+
+        rotated = rotated_object(data_dir, data_dir + "/approximate_labels/" + l, best_angle)
+        # print( rotated["location"], rotated["image_size"])
+        created_prediction = model(rotated["image"].to(computational_device))
+
+        prediction = Tensor.numpy(squeeze(created_prediction), force=True)
+
+        rotated_object(data_dir, data_dir + "/approximate_labels/" + l, best_angle, 2, prediction)
+
+
 
 
 

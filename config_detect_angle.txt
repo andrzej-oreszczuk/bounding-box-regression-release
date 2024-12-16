@@ -1,4 +1,3 @@
-model_path ./models/pretrained_chloroplast_last/lightning_logs/version_0/checkpoints/point-epoch=35-valid_loss=0.001630-train_loss=0.001332.ckpt  ## ścieżka do modelu do załadowania
-labels_xmax 242    ## maksymalna szerokość ramki w zbiorze danych
-labels_ymax 394    ## maksymalna wysokość ramki w zbiorze danych
-data_dir ./datasets/chloroplast/test                             ## ścieżka do danych do analizy
+model_path models/chloroplast_218_pretrained/lightning_logs/version_3/checkpoints/point-epoch=1834-valid_loss=0.001984-train_loss=0.001645-aug10.ckpt  ## path to the scripted model to be loaded
+data_dir ./datasets/chloroplast/test                             ## data directory
+model_mode 218 ## rozmiar pola recepcyjnego ;  218 / 170 / 114 / 70 / 40  (1, 4, 14, 38, 90) 
