@@ -1,0 +1,13 @@
+train:  /scratch/projekty/023_granum/yolov8_Inst_Segm/data/zbior_A_B_R_C_R1_all/yolov8_segmentation/train/images
+val:  /scratch/projekty/023_granum/yolov8_Inst_Segm/data/zbior_A_B_R_C_R1_all/yolov8_segmentation/valid/images
+test: ../test/images
+
+nc: 1
+names: ['granum']
+
+roboflow:
+  workspace: anna-sliwinska
+  project: thylakoid_train_abr-no5qw
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/anna-sliwinska/thylakoid_train_abr-no5qw/dataset/1
