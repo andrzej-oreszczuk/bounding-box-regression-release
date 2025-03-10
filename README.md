@@ -8,4 +8,4 @@ Each of them needs a configuration file (eg. python3 bounding_box_train.py confi
 
 Model architecture is defined in init_model.py, training parameters in lightning_module.py.
 
-Tools directory contains various tools, including create_location_data_from_labels.py, which creates in a given directory containing a YOLO format dataset with images and labels directories an additional directory with objects locations used for model training.
+Tools directory contains various tools, including create_location_data_from_labels.py, which creates in a given directory containing a YOLO format dataset with images and labels directories an additional directory with approximate labels used for model training.
