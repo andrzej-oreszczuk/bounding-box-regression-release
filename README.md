@@ -1,10 +1,11 @@
 # bounding-box-regression-release
 
-Skrypty bounding_box_train.py, bounding_box_create_labels.py, bounding_box_detect_angle.py, bounding_box_save_attention.py służą odpowiednio do trenowania modelu, przewidywania ramek, wykrywania kąta obrotu obiektów i zapisywania wycinków z obiektami i ich masek z modułu uwagi. 
-Wszystkie uruchamia się podając pliki konfiguracyjne jako argument wykonania (python3 bounding_box_train.py config_train.py). Argumenty konfiguracji są opisane w plikach konfiguracyjnych.
-
-Architektura sieci jest zdefiniowana w pliku init_model.py, konfiguracja treningu w pliku lightning_module.py.
+This repo contains a neural net that performs bounding box regression on imprecisely labeled bounding boxes, and associated tools. After training on precisely labeled data it can perform bounding box regression on provided imprecise labels, and at least for some datasets (microscopy images of chloroplast structures in leaves) it performs better than the latest YOLOv11 model with a comparable number of parameters.
 
 
-W katalogu tools znajdują się różne przydatne narzędzia, w tym skrypt create_location_data_from_labels.py który tworzy w podanym katalogu z danymi w formacie YOLO w katalogach images i labels katalog z plikami z położeniami obiektów, konwertując dowolny zbiór danych w formacie YOLO na kompatybilny z siecią.
-Sieć działa tylko na zbiorach w których wszystkie obrazy mają taki sam rozmiar. Katalog z danymi musi zawierać katalogi train, valid i test, z katalogami images, labels i locations_of_labels w każdym z nich.
+Scripts bounding_box_train.py, bounding_box_create_labels.py, bounding_box_detect_angle.py are used to train the model, predict bounding boxes, predict the angle of rotation for approximately rectangular objects. 
+Each of them needs a configuration file (eg. python3 bounding_box_train.py config_train.py). Configuration arguments are described in the configuration files.
+
+Model architecture is defined in init_model.py, training parameters in lightning_module.py.
+
+Tools catalouge contains various tools, including create_location_data_from_labels.py, which creates in a given catalogue with a YOLO format dataset with images and labels catalogues an additional catalogue with objects locations used for model training.
